@@ -1,0 +1,65 @@
+{
+    "name": "gemvc/connection-pdo",
+    "description": "PDO connection adapter for GEMVC framework",
+    "type": "library",
+    "license": "MIT",
+    "keywords": [
+        "gemvc",
+        "database",
+        "connection",
+        "pdo",
+        "php-fpm"
+    ],
+    "authors": [
+        {
+            "name": "Ali Khorsandfard",
+            "homepage": "https://www.gemvc.de"
+        }
+    ],
+    "homepage": "https://github.com/gemvc/connection-pdo",
+    "support": {
+        "issues": "https://github.com/gemvc/connection-pdo/issues",
+        "source": "https://github.com/gemvc/connection-pdo"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/gemvc/connection-pdo.git"
+    },
+    "require": {
+        "php": ">=8.2",
+        "gemvc/connection-contracts": "^1.0"
+    },
+    "require-dev": {
+        "phpstan/phpstan": "^2.1",
+        "phpunit/phpunit": "^10.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Gemvc\\Database\\Connection\\Pdo\\": "src/Gemvc/Database/Connection/Pdo/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Gemvc\\Database\\Connection\\Pdo\\Tests\\": "tests/"
+        }
+    },
+    "archive": {
+        "exclude": [
+            "/tests",
+            "/.github",
+            "/.phpunit.cache",
+            "/phpunit.xml",
+            "/phpstan.neon",
+            "/RELEASE_NOTES.md",
+            "/COMPATIBILITY_ANALYSIS.md",
+            "/LOCAL_INTEGRATION_COMPLETE.md",
+            "/LOCAL_INTEGRATION_TEST.md",
+            "/PRE_PUBLISH_REVIEW.md",
+            "/REFACTORING_NEEDED.md",
+            "/STATUS.md",
+            "/TEST_RESULTS.md"
+        ]
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
