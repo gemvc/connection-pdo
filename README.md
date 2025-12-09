@@ -257,10 +257,10 @@ vendor/bin/phpstan analyse --level 9
 
 The package includes comprehensive test coverage:
 
-- **Overall Coverage:** 91.09% lines, 82.76% methods
-- **PdoConnection:** 94.04% lines, 88.89% methods
-- **PdoConnectionAdapter:** 82.35% lines, 72.73% methods
-- **Total Tests:** 137 tests with 370 assertions
+- **Overall Coverage:** 100.00% lines, 100.00% methods
+- **PdoConnection:** 100.00% lines, 100.00% methods
+- **PdoConnectionAdapter:** 100.00% lines, 100.00% methods
+- **Total Tests:** 145 tests with 410 assertions
 
 ### Test Classes
 
@@ -285,3 +285,11 @@ The HTML report will be generated in the `coverage-report/` directory.
 ## License
 
 MIT
+
+---
+
+## Made with ❤️ by Ali Khorsandfard
+
+This package is part of the [GEMVC Repository](https://github.com/gemvc) framework ecosystem.
+
+[GEMVC is PHP framework built for Microservice.](https://www.gemvc.de)
