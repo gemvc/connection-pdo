@@ -1,5 +1,10 @@
 # gemvc/connection-pdo
 
+![PHPStan](https://img.shields.io/badge/PHPStan-Level%209-8E5CF9?style=flat-square&logo=php)
+![Unit Tests](https://img.shields.io/badge/Unit%20Tests-100%25-28A745?style=flat-square&logo=phpunit)
+![Integration Tests](https://img.shields.io/badge/Integration%20Tests-Passing-28A745?style=flat-square&logo=phpunit)
+![Class Coverage](https://img.shields.io/badge/Class%20Coverage-100%25-28A745?style=flat-square&logo=phpunit)
+
 PDO connection library implementation package for GEMVC framework.
 
 ## Package Information
