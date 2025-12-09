@@ -7,6 +7,7 @@ namespace Gemvc\Database\Connection\Pdo\Tests\Unit;
 use PHPUnit\Framework\TestCase;
 use Gemvc\Database\Connection\Pdo\PdoConnectionAdapter;
 use PDO;
+use ReflectionClass;
 
 /**
  * Unit tests for PdoConnectionAdapter
@@ -234,5 +235,94 @@ class PdoConnectionAdapterTest extends TestCase
         $adapter->setError('Error without context');
         
         $this->assertEquals('Error without context', $adapter->getError());
+    }
+
+    /**
+     * Test beginTransaction() handles PDOException
+     * 
+     * This test covers the catch block in beginTransaction() (lines 106-109).
+     * We use a mock PDO that throws PDOException to trigger the exception path.
+     */
+    public function testBeginTransactionHandlesPdoException(): void
+    {
+        // Create a mock PDO that throws PDOException on beginTransaction
+        $mockPdo = $this->createMock(PDO::class);
+        $mockPdo->expects($this->once())
+            ->method('beginTransaction')
+            ->willThrowException(new \PDOException('Database connection lost'));
+        
+        $adapter = new PdoConnectionAdapter($mockPdo);
+        
+        $result = $adapter->beginTransaction();
+        
+        $this->assertFalse($result);
+        $this->assertNotNull($adapter->getError());
+        $this->assertStringContainsString('Failed to begin transaction', $adapter->getError());
+        $this->assertStringContainsString('Database connection lost', $adapter->getError());
+        $this->assertFalse($adapter->inTransaction());
+    }
+
+    /**
+     * Test commit() handles PDOException
+     * 
+     * This test covers the catch block in commit() (lines 133-136).
+     * We use a mock PDO that throws PDOException to trigger the exception path.
+     */
+    public function testCommitHandlesPdoException(): void
+    {
+        // Create a mock PDO that throws PDOException on commit
+        $mockPdo = $this->createMock(PDO::class);
+        $mockPdo->expects($this->once())
+            ->method('commit')
+            ->willThrowException(new \PDOException('Transaction already committed'));
+        
+        $adapter = new PdoConnectionAdapter($mockPdo);
+        
+        // Manually set inTransaction to true to pass the check
+        $reflection = new ReflectionClass($adapter);
+        $inTransactionProperty = $reflection->getProperty('inTransaction');
+        $inTransactionProperty->setAccessible(true);
+        $inTransactionProperty->setValue($adapter, true);
+        
+        $result = $adapter->commit();
+        
+        $this->assertFalse($result);
+        $this->assertNotNull($adapter->getError());
+        $this->assertStringContainsString('Failed to commit transaction', $adapter->getError());
+        $this->assertStringContainsString('Transaction already committed', $adapter->getError());
+        // inTransaction should remain true because commit failed
+        $this->assertTrue($inTransactionProperty->getValue($adapter));
+    }
+
+    /**
+     * Test rollback() handles PDOException
+     * 
+     * This test covers the catch block in rollback() (lines 160-163).
+     * We use a mock PDO that throws PDOException to trigger the exception path.
+     */
+    public function testRollbackHandlesPdoException(): void
+    {
+        // Create a mock PDO that throws PDOException on rollBack
+        $mockPdo = $this->createMock(PDO::class);
+        $mockPdo->expects($this->once())
+            ->method('rollBack')
+            ->willThrowException(new \PDOException('No active transaction'));
+        
+        $adapter = new PdoConnectionAdapter($mockPdo);
+        
+        // Manually set inTransaction to true to pass the check
+        $reflection = new ReflectionClass($adapter);
+        $inTransactionProperty = $reflection->getProperty('inTransaction');
+        $inTransactionProperty->setAccessible(true);
+        $inTransactionProperty->setValue($adapter, true);
+        
+        $result = $adapter->rollback();
+        
+        $this->assertFalse($result);
+        $this->assertNotNull($adapter->getError());
+        $this->assertStringContainsString('Failed to rollback transaction', $adapter->getError());
+        $this->assertStringContainsString('No active transaction', $adapter->getError());
+        // inTransaction should remain true because rollback failed
+        $this->assertTrue($inTransactionProperty->getValue($adapter));
     }
 }
