@@ -5,3 +5,4 @@
 composer.lock
 /coverage-report/
 phpunit.xml
+/.vscode/
