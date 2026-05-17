@@ -16,7 +16,7 @@ PDO connection library implementation package for GEMVC framework.
 - **Namespace:** `Gemvc\Database\Connection\Pdo\`
 - **Type:** PDO connection implementation package
 - **Environment:** Apache/Nginx PHP-FPM (simple connections)
-- **Framework-Specific:** ⚠️ No - This package is framework-agnostic (only depends on `connection-contracts`)
+- **Framework-Specific:** No - This package is framework-agnostic (only depends on `connection-contracts`)
 - **Depends On:** `gemvc/connection-contracts: ^1.0`
 
 ## Purpose
