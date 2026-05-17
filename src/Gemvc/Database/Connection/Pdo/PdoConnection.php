@@ -303,16 +303,24 @@ class PdoConnection implements ConnectionManagerInterface
 
         // MySQL-specific optimizations
         if ($driver === 'mysql') {
-            $options[PDO::MYSQL_ATTR_INIT_COMMAND] = sprintf(
+            $usePdoMysqlClass = \PHP_VERSION_ID >= 80500 && \class_exists('Pdo\\Mysql');
+            $mysqlInitCmdAttr = $usePdoMysqlClass
+                ? \Pdo\Mysql::ATTR_INIT_COMMAND
+                : \PDO::MYSQL_ATTR_INIT_COMMAND;
+            $mysqlBufferedAttr = $usePdoMysqlClass
+                ? \Pdo\Mysql::ATTR_USE_BUFFERED_QUERY
+                : \PDO::MYSQL_ATTR_USE_BUFFERED_QUERY;
+
+            $options[$mysqlInitCmdAttr] = sprintf(
                 "SET NAMES %s COLLATE %s, SESSION sql_mode='STRICT_TRANS_TABLES,NO_ZERO_DATE,NO_ZERO_IN_DATE,ERROR_FOR_DIVISION_BY_ZERO'",
                 is_string($this->config['charset']) ? $this->config['charset'] : 'utf8mb4',
                 is_string($this->config['collation']) ? $this->config['collation'] : 'utf8mb4_unicode_ci'
             );
-            $options[PDO::MYSQL_ATTR_USE_BUFFERED_QUERY] = true; // Better for large result sets
-            
+            $options[$mysqlBufferedAttr] = true; // Better for large result sets
+
             // Optional: Enable compression for high-latency connections
             // Uncomment if network latency is an issue:
-            // $options[PDO::MYSQL_ATTR_COMPRESS] = true;
+            // $options[$usePdoMysqlClass ? \Pdo\Mysql::ATTR_COMPRESS : \PDO::MYSQL_ATTR_COMPRESS] = true;
         }
 
         // SQLite doesn't require username/password
