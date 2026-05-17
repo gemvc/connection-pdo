@@ -281,7 +281,6 @@ class PdoConnectionAdapterTest extends TestCase
         // Manually set inTransaction to true to pass the check
         $reflection = new ReflectionClass($adapter);
         $inTransactionProperty = $reflection->getProperty('inTransaction');
-        $inTransactionProperty->setAccessible(true);
         $inTransactionProperty->setValue($adapter, true);
         
         $result = $adapter->commit();
@@ -313,7 +312,6 @@ class PdoConnectionAdapterTest extends TestCase
         // Manually set inTransaction to true to pass the check
         $reflection = new ReflectionClass($adapter);
         $inTransactionProperty = $reflection->getProperty('inTransaction');
-        $inTransactionProperty->setAccessible(true);
         $inTransactionProperty->setValue($adapter, true);
         
         $result = $adapter->rollback();

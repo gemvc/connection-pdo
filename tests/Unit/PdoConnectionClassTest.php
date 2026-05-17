@@ -551,7 +551,6 @@ class PdoConnectionClassTest extends TestCase
         // Use reflection to call destructor directly
         $reflection = new ReflectionClass(PdoConnection::class);
         $destructor = $reflection->getMethod('__destruct');
-        $destructor->setAccessible(true);
         $destructor->invoke($manager);
         
         // Verify connections were released
@@ -561,7 +560,6 @@ class PdoConnectionClassTest extends TestCase
         
         // Verify activeConnections array was cleared
         $activeConnectionsProperty = $reflection->getProperty('activeConnections');
-        $activeConnectionsProperty->setAccessible(true);
         $activeConnections = $activeConnectionsProperty->getValue($manager);
         $this->assertCount(0, $activeConnections);
     }
@@ -580,7 +578,6 @@ class PdoConnectionClassTest extends TestCase
         // Use reflection to call destructor
         $reflection = new ReflectionClass(PdoConnection::class);
         $destructor = $reflection->getMethod('__destruct');
-        $destructor->setAccessible(true);
         
         // Should not cause any errors
         $destructor->invoke($manager);
@@ -603,7 +600,6 @@ class PdoConnectionClassTest extends TestCase
         // Use reflection to call destructor
         $reflection = new ReflectionClass(PdoConnection::class);
         $destructor = $reflection->getMethod('__destruct');
-        $destructor->setAccessible(true);
         $destructor->invoke($manager);
         
         // Verify connection was released
@@ -887,7 +883,6 @@ class PdoConnectionClassTest extends TestCase
         $initializeMethod = $reflection->getMethod('initialize');
         
         // Call initialize which should trigger the exception
-        // Note: setAccessible() is not needed in PHP 8.1+ (reflection is accessible by default)
         $initializeMethod->invoke($testableClass);
         
         // Verify exception was caught and handled (lines 186-189)
@@ -915,11 +910,9 @@ class PdoConnectionClassTest extends TestCase
         
         // Get the initialize method
         $initializeMethod = $reflection->getMethod('initialize');
-        $initializeMethod->setAccessible(true);
         
         // Get properties
         $initializedProperty = $reflection->getProperty('initialized');
-        $initializedProperty->setAccessible(true);
         
         // Verify normal initialization
         $this->assertTrue($manager->isInitialized());

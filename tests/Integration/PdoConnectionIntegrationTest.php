@@ -636,7 +636,6 @@ class PdoConnectionIntegrationTest extends TestCase
         // Use reflection to directly call __destruct() on the instance
         $reflection = new \ReflectionClass(PdoConnection::class);
         $activeConnectionsProperty = $reflection->getProperty('activeConnections');
-        $activeConnectionsProperty->setAccessible(true);
         
         // Verify activeConnections has 2 items before destructor
         $activeConnections = $activeConnectionsProperty->getValue($manager);
@@ -644,7 +643,6 @@ class PdoConnectionIntegrationTest extends TestCase
         
         // Call __destruct() directly
         $destructor = $reflection->getMethod('__destruct');
-        $destructor->setAccessible(true);
         $destructor->invoke($manager);
         
         // Verify connections were released by __destruct()

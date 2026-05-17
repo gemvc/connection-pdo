@@ -428,7 +428,6 @@ class PdoConnectionTest extends TestCase
         // Use reflection to get access to activeConnections to verify state
         $reflection = new \ReflectionClass(PdoConnection::class);
         $activeConnectionsProperty = $reflection->getProperty('activeConnections');
-        $activeConnectionsProperty->setAccessible(true);
         
         // Verify activeConnections has 3 items before destructor
         $activeConnections = $activeConnectionsProperty->getValue($manager);
@@ -437,7 +436,6 @@ class PdoConnectionTest extends TestCase
         // Use reflection to directly call __destruct() on the instance
         // This ensures we actually test the __destruct() method, not resetInstance()
         $destructor = $reflection->getMethod('__destruct');
-        $destructor->setAccessible(true);
         $destructor->invoke($manager);
         
         // Verify connections were released by __destruct()
@@ -531,15 +529,12 @@ class PdoConnectionTest extends TestCase
         
         // Get the initialize method
         $initializeMethod = $reflection->getMethod('initialize');
-        $initializeMethod->setAccessible(true);
         
         // Get the setError method to verify it's called
         $setErrorMethod = $reflection->getMethod('setError');
-        $setErrorMethod->setAccessible(true);
         
         // Get the initialized property
         $initializedProperty = $reflection->getProperty('initialized');
-        $initializedProperty->setAccessible(true);
         
         // Create a mock scenario: temporarily break buildDatabaseConfig by manipulating the instance
         // We'll create a subclass that throws in buildDatabaseConfig, but that's complex
@@ -584,16 +579,12 @@ class PdoConnectionTest extends TestCase
         
         // Get private methods and properties
         $initializeMethod = $reflection->getMethod('initialize');
-        $initializeMethod->setAccessible(true);
         
         $buildConfigMethod = $reflection->getMethod('buildDatabaseConfig');
-        $buildConfigMethod->setAccessible(true);
         
         $initializedProperty = $reflection->getProperty('initialized');
-        $initializedProperty->setAccessible(true);
         
         $configProperty = $reflection->getProperty('config');
-        $configProperty->setAccessible(true);
         
         // Verify normal initialization
         $this->assertTrue($manager->isInitialized());
